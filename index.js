@@ -1,47 +1,48 @@
-const http = require("http");
-const fs = require("fs");
+const http = require('http')
+const fs = require('fs')
+let homecontent = ''
+let filecontent = ''
+let reg = ''
 
-let content_in_home = ''
-let content_in_file = ''
-let register = ''
-readFile('home.html',
+fs.readFile('home.html',
   (err, home) => {
     if (err) {
       throw err
     }
-    content_in_home = home
+    homecontent = home
   })
 
-readFile('project.html',
-  (err, files) => {
+fs.readFile('project.html',
+  (err, fil) => {
     if (err) {
       throw err
     }
-    content_in_file = files
+    filecontent = fil
   })
 
-readFile('registration.html',
-  (err, regfs) => {
+fs.readFile('registration.html',
+  (err, regf) => {
     if (err) {
       throw err
     }
-    register = regfs
+    reg = regf
   })
+
 const args = require('minimist')(process.argv.slice(2))
-createServer((request, response) => {
+http.createServer((request, response) => {
   const url = request.url
-  response.writeHead(200, { 'Content-type': 'text/html' })
+  response.writeHeader(200, { 'Content-type': 'text/html' })
   switch (url) {
     case '/project':
-      response.write(content_in_file)
+      response.write(filecontent)
       response.end()
       break
     case '/registration':
-      response.write(register)
+      response.write(reg)
       response.end()
       break
     default:
-      response.write(content_in_home)
+      response.write(homecontent)
       response.end()
       break
   }
